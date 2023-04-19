@@ -2,25 +2,21 @@ services:
   cloudflared:
     image: symbytech/cloudflare-manager:latest
     container_name: cloudflared
-    build: &build-dev
+    build:
       context: .
-      dockerfile: Dockerfile
-      tags:
-        - symbytech/cloudflare-manager:latest
-      platforms:
-        - linux/amd64
-        - linux/arm64
-        - linux/arm/v7
-        - linux/arm/v8
+      dockerfile: ./Dockerfile
+      args:
+        CLOUDFLARED_VERSION: 2021.8.2
       x-bake:
+        tags:
+          - symbytech/cloudflare-manager:latest
         platforms:
           - linux/amd64
           - linux/arm64
           - linux/arm/v7
           - linux/arm/v8
-    restart: unless-stopped
-    command: tunnel run
-    volumes:
-      - ./:/app
+#        cache-to: type=registry,ref=symbytech/xbake-demo:cache
     environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+      - "TZ=Europe/Paris"
+      - "TUNNEL_DNS_UPSTREAM=https://1.1.1.1/dns-query,https://1.0.0.1/dns-query"
+    restart: always
