@@ -1,0 +1,29 @@
+services:
+  cloudflared:
+    image: symbytech/cloudflare-manager:latest
+    container_name: cloudflared
+    build: &build-dev
+        context: .
+        dockerfile: Dockerfile
+        tags:
+          - symbytech/cloudflare-manager:latest
+        platforms:
+          - linux/amd64
+          - linux/arm64
+          - linux/arm/v7
+          - linux/arm/v8
+    restart: unless-stopped
+    command: tunnel run
+    volumes:
+      - ./:/app
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+  webapp-release:
+    build:
+      <<: *build-dev
+      x-bake:
+        platforms:
+          - linux/amd64
+          - linux/arm64
+          - linux/arm/v7
+          - linux/arm/v8

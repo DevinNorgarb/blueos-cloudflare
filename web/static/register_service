@@ -1,0 +1,9 @@
+{
+    "name":"Cloudflare Manager",
+    "description":"Manager for Cloudflare tunnels",
+    "icon":"mdi-wan",
+    "company":"SymbyTech",
+    "version":"1.0.0",
+    "webpage":"https://github.com/Symbytech/Cloudflare-Manager",
+    "api":"/v1.0/docs"
+}
