@@ -2,11 +2,15 @@ services:
   cloudflared:
     image: symbytech/cloudflare-manager:latest
     container_name: cloudflared
+    network_mode: host
+    ports:
+      - "9152:80"
     build:
       context: .
       dockerfile: ./Dockerfile
       args:
         CLOUDFLARED_VERSION: 2021.8.2
+        ARCHS: "amd64 arm64 armv7"
       x-bake:
         tags:
           - symbytech/cloudflare-manager:latest

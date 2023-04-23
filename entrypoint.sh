@@ -1,14 +1,14 @@
 #!/bin/sh
 
 
-log "Starting Cloudflared tunnel"
+echo "Starting Cloudflared tunnel"
 
 #cloudflared tunnel run
 
 # launch web interface
 cd web && python main.py &
 
-log "Sleeping infinitely"
+echo "Sleeping infinitely"
 while true
 do
   sleep 1
