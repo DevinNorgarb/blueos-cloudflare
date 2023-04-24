@@ -14,6 +14,9 @@
 <body>
 <header>
 </header>
+
+
+
 <div id="app">
     <main class="container">
         <form>
@@ -45,7 +48,22 @@
 </div>
 </body>
 <script>
-
+    data() {
+        return {
+            response: ''
+        }
+    },
+    methods: {
+        startCloudflared() {
+            axios.post('http://localhost:8000/cloudflared')
+                .then(response => {
+                    this.response = response.data.message
+                })
+                .catch(error => {
+                    this.response = error.response.data.error
+                })
+        }
+    }
 
     var app = new Vue({
         el: "#app",
@@ -75,7 +93,7 @@
                 })
             },
             joinNetwork() {
-                axios.post(`/v1.0/command/join?network=${inputnetwork}`).then((result) => {
+                axios.post(`/v1.0/command/create`).then((result) => {
                     this.status = result.data.stdout;
                     console.log(result.status)
                 })

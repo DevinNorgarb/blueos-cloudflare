@@ -37,35 +37,48 @@ def run_command(command: str, check: bool = True) -> "subprocess.CompletedProces
         stderr=subprocess.PIPE,
     )
 
+@app.post('/cloudflared')
+async def run_cloudflared():
+    # Execute Cloudflared CLI command
+    cmd = 'cloudflared tunnel --url http://localhost:80'
+    result = subprocess.run(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-@app.post("/command/join", status_code=status.HTTP_200_OK)
+    if result.returncode != 0:
+        # Send error response if command failed
+        return {"error": result.stderr.decode()}, 500
+
+    # Send response with command output
+    return {"output": result.stdout.decode()}, 200
+
+
+@app.post("/command/create", status_code=status.HTTP_200_OK)
 @version(1, 0)
-async def command_join(network: str) -> Any:
-    command = f'zerotier-cli join {network}'
+async def command_join() -> Any:
+    command = f'cloudflared tunnel --url http://localhost:80 &'
     logger.debug(f"Running command: {command}")
     output = run_command(command, False)
     return output
 
-@app.post("/command/leave", status_code=status.HTTP_200_OK)
-@version(1, 0)
-async def command_leave(network: str) -> Any:
-    command = f'zerotier-cli leave {network}'
-    logger.debug(f"Running command: {command}")
-    output = run_command(command, False)
-    return output
+# @app.post("/command/leave", status_code=status.HTTP_200_OK)
+# @version(1, 0)
+# async def command_leave(network: str) -> Any:
+#     command = f'zerotier-cli leave {network}'
+#     logger.debug(f"Running command: {command}")
+#     output = run_command(command, False)
+#     return output
 
 @app.get("/command/info", status_code=status.HTTP_200_OK)
 @version(1, 0)
 async def command_info() -> Any:
-    command = f'zerotier-cli info'
+    command = f'cloudflared tunnel list'
     logger.debug(f"Running command: {command}")
     output = run_command(command, False)
     return output
 
-@app.get("/command/networks", status_code=status.HTTP_200_OK)
+@app.get("/command/login", status_code=status.HTTP_200_OK)
 @version(1, 0)
 async def command_info() -> Any:
-    command = f'zerotier-cli listnetworks'
+    command = f'cloudflared tunnel login'
     logger.debug(f"Running command: {command}")
     output = run_command(command, False)
     return output
@@ -77,4 +90,4 @@ app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 if __name__ == "__main__":
     # Running uvicorn with log disabled so loguru can handle it
-    uvicorn.run(app, host="0.0.0.0", port=80, log_config=None)
+    uvicorn.run(app, host="0.0.0.0", port=56489, log_config=None)

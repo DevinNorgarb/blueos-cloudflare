@@ -16,7 +16,7 @@ RUN chmod +x /usr/local/bin/cloudflared
 COPY web /web
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
-RUN apt-get update; apt-get install curl tar gzip ca-certificates python-pip python3-pip python3 -y;
+RUN apt-get update; apt-get install curl tar gzip ca-certificates python3-pip python3 -y;
 WORKDIR /
 RUN cd web && pip install .
 
