@@ -6,7 +6,7 @@ echo "Starting Cloudflared tunnel"
 #cloudflared tunnel run
 
 # launch web interface
-cd web && python main.py &
+cd web && python3 main.py &
 
 echo "Sleeping infinitely"
 while true
