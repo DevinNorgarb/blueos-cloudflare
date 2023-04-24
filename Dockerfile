@@ -14,19 +14,11 @@ FROM debian
 COPY --from=builder cloudflared /usr/local/bin/cloudflared
 RUN chmod +x /usr/local/bin/cloudflared
 COPY web /web
-
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
-##ARG TARGETARCH
-##ENV TARGETARCH $TARGETARCH
-RUN apt-get update; apt-get install curl tar gzip ca-certificates python3-pip python3 -y; apt-get clean
-#RUN curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-$TARGETARCH.deb
-##RUN dpkg -i cloudflared.deb
-
+RUN apt-get update; apt-get install curl tar gzip ca-certificates python-pip python3-pip python3 -y;
 WORKDIR /
-COPY web /web
-
-RUN cd web && pip3 install .
+RUN cd web && pip install .
 
 HEALTHCHECK --interval=1s CMD bash /healthcheck.sh
 #
