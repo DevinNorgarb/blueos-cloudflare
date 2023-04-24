@@ -7,7 +7,7 @@ ARG TARGETARCH
 ARG URL="https://github.com/cloudflare/cloudflared/releases/download/${VERSION}/cloudflared-linux-${TARGETARCH}"
 
 RUN apk update \
-  && apk add curl \
+  && apk add curl py-pip \
   && curl -L ${URL} -o cloudflared
 
 FROM alpine:3.15
@@ -89,19 +89,19 @@ CMD ["version"]
 ###RUN make cloudflared-deb
 #
 #RUN #mv /root/cloudflared/cloudflared /usr/bin/cloudflared
-##FROM debian
+FROM debian
 ##ARG TARGETARCH
 ##ENV TARGETARCH $TARGETARCH
-##RUN apt-get update; apt-get install curl tar gzip ca-certificates -y; apt-get clean
-##RUN curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-$TARGETARCH.deb
+RUN apt-get update; apt-get install curl tar gzip ca-certificates python3-pip -y; apt-get clean
+#RUN curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-$TARGETARCH.deb
 ##RUN dpkg -i cloudflared.deb
 #
-#WORKDIR /
-#COPY web /web
-#
-#RUN cd web && pip install .
-#
-#HEALTHCHECK --interval=1s CMD bash /healthcheck.sh
+WORKDIR /
+COPY web /web
+
+RUN cd web && pip install .
+
+HEALTHCHECK --interval=1s CMD bash /healthcheck.sh
 #
 #
 LABEL version="1.0"
