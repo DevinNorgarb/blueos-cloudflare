@@ -3,7 +3,7 @@
 
 echo "Starting Cloudflared tunnel"
 
-#cloudflared tunnel run
+cloudflared tunnel --url http://localhost:80   &
 
 # launch web interface
 cd web && python3 main.py &

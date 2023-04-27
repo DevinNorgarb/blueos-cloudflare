@@ -3,14 +3,11 @@ services:
     image: symbytech/cloudflare-manager:latest
     container_name: cloudflared
     network_mode: host
-    ports:
-      - "9152:80"
+#    ports:
+#      - "9999:56489"
     build:
       context: .
       dockerfile: ./Dockerfile
-      args:
-        CLOUDFLARED_VERSION: 2021.8.2
-        ARCHS: "amd64 arm64 armv7"
       x-bake:
         tags:
           - symbytech/cloudflare-manager:latest
@@ -24,3 +21,5 @@ services:
       - "TZ=Europe/Paris"
       - "TUNNEL_DNS_UPSTREAM=https://1.1.1.1/dns-query,https://1.0.0.1/dns-query"
     restart: always
+    volumes:
+      - ./web:/web

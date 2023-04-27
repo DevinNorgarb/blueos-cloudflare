@@ -15,14 +15,11 @@ COPY --from=builder cloudflared /usr/local/bin/cloudflared
 RUN chmod +x /usr/local/bin/cloudflared
 COPY web /web
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod 755 /entrypoint.sh
+RUN chmod 777 /entrypoint.sh
 RUN apt-get update; apt-get install curl tar gzip ca-certificates python3-pip python3 -y;
 WORKDIR /
 RUN cd web && pip install .
 
-HEALTHCHECK --interval=1s CMD bash /healthcheck.sh
-#
-#
 LABEL version="1.0"
 LABEL permissions '\
 {\

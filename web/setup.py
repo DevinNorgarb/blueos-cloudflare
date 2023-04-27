@@ -14,5 +14,6 @@ setuptools.setup(
         "loguru == 0.5.3",
         "uvicorn == 0.13.4",
         "aiofiles == 0.8.0",
+        "watchdog == 2.1.3",
     ],
 )
